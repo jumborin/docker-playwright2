@@ -28,3 +28,9 @@ services:
     profiles:
       - manual
     command: npm test
+
+networks:
+  default:
+    name: playwright-network
+    driver: bridge
+    external: false
