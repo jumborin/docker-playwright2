@@ -7,9 +7,13 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ['html', { outputFolder: 'reports/html' }],
+    ['html', { 
+      outputFolder: 'reports/html',
+      open: 'never'
+    }],
     ['junit', { outputFile: 'reports/junit.xml' }],
-    ['json', { outputFile: 'reports/results.json' }]
+    ['json', { outputFile: 'reports/results.json' }],
+    ['list']
   ],
   use: {
     baseURL: process.env.BASE_URL || 'https://example.com',

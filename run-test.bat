@@ -3,7 +3,9 @@ echo Starting Playwright Excel Test...
 echo.
 
 echo Cleaning up Docker resources...
-docker-compose down --remove-orphans
+docker-compose down --remove-orphans --volumes
+docker network prune -f
+docker system prune -f
 docker rmi docker-playwright2_playwright-test docker-playwright2_test-runner 2>nul
 
 echo Starting test...
