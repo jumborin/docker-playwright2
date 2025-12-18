@@ -1,0 +1,8 @@
+caseId	description	action	selector	value	expect
+TC01	Playwrightサイトテスト	goto	https://playwright.dev		
+TC01	タイトル部分一致確認	assertcontains	h1		Playwright
+TC01	ページ表示確認	assertVisible	nav		
+TC01	スクリーンショット撮影	screenshot			
+TC02	Redmineサイトテスト	goto	https://www.redmine.org/		
+TC02	ページ表示確認	assertVisible	body		
+TC02	スクリーンショット撮影	screenshot			

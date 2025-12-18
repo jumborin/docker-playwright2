@@ -1,0 +1,30 @@
+x-common: &common
+  build: .
+  volumes:
+    - ./testcases:/app/testcases
+    - ./reports:/app/reports
+    - ./tests:/app/tests
+    - ./scripts:/app/scripts
+  environment:
+    - NODE_ENV=production
+    - TZ=Asia/Tokyo
+
+services:
+  playwright-test:
+    <<: *common
+    container_name: playwright-excel-automation
+    environment:
+      - NODE_ENV=production
+      - SCHEDULE_ENABLED=true
+      - TZ=Asia/Tokyo
+    ports:
+      - "9323:9323"
+    restart: unless-stopped
+    command: npx ts-node scripts/scheduler.ts
+
+  test-runner:
+    <<: *common
+    container_name: playwright-test-runner
+    profiles:
+      - manual
+    command: npm test
