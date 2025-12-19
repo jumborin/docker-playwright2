@@ -1,13 +1,23 @@
 caseId	description	action	selector	value	expect
-TC01_PlayWright	Playwrightサイトテスト	goto	https://playwright.dev		
-TC01_PlayWright	タイトル部分一致確認	assertcontains	h1		Playwright
-TC01_PlayWright	ページ表示確認	assertVisible	nav		
-TC01_PlayWright	スクリーンショット撮影	screenshot			
-TC02_遷移	Redmineサイトテスト	goto	https://www.redmine.org/		
-TC02_遷移	「概要」をクリック	click	#main-menu > ul > li:nth-child(1) > a		
-TC02_遷移	ページ表示確認	assertVisible	body		
-TC02_遷移	スクリーンショット撮影	screenshot			
-TC03_検索	検索ボックスに入力	fill	#q	テスト	
-TC03_検索	Enterキーを入力	press		Enter	
-TC02_遷移	ページ表示確認(検索ボタンがあること)	asserttext 	結果 (0)		
-TC03_検索	スクリーンショット撮影	screenshot			
+TC01_Basic	基本アクションテスト	goto	https://playwright.dev		
+TC01_Basic	ページ読み込み待機	wait		2000	
+TC01_Basic	タイトル要素表示確認	assertvisible	h1		
+TC01_Basic	タイトルテキスト確認	asserttext	h1		Playwright enables reliable end-to-end testing for modern web apps.
+TC01_Basic	タイトル部分一致確認	assertcontains	h1		Playwright
+TC01_Basic	スクリーンショット撮影	screenshot			
+TC02_Input	入力系アクションテスト	goto	https://demo.playwright.dev/todomvc		
+TC02_Input	入力フィールドに値入力	fill	.new-todo	サンプルタスク	
+TC02_Input	Enterキー押下	press		Enter	
+TC02_Input	タイピング入力	type	.new-todo	追加テキスト	
+TC02_Input	タスク要素をクリック	click	.todo-list li:first-child .toggle		
+TC02_Input	スクリーンショット撮影	screenshot			
+TC03_Interaction	操作系アクションテスト	goto	https://demo.playwright.dev/todomvc		
+TC03_Interaction	要素にホバー	hover	.new-todo		
+TC03_Interaction	Tabキー押下	press		Tab	
+TC03_Interaction	Escapeキー押下	press		Escape	
+TC03_Interaction	待機処理	wait		1500	
+TC03_Interaction	スクリーンショット撮影	screenshot			
+TC04_Select	セレクトボックステスト	goto	https://the-internet.herokuapp.com/dropdown		
+TC04_Select	ドロップダウン選択	select	#dropdown	Option 1	
+TC04_Select	選択結果確認	assertvisible	#dropdown		
+TC04_Select	スクリーンショット撮影	screenshot			

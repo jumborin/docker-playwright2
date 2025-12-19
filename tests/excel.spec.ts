@@ -90,6 +90,11 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
       await expect(page.locator(step.selector)).toHaveText(step.expect || '');
       break;
       
+    // 要素のテキストに期待値が含まれるかを確認
+    case 'assertcontains':
+      await expect(page.locator(step.selector)).toContainText(step.expect || '');
+      break;
+      
     // 要素が表示されているかを確認
     case 'assertvisible':
       await expect(page.locator(step.selector)).toBeVisible();
