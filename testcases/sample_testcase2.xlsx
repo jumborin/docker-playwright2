@@ -1,5 +1,5 @@
 caseId	description	action	selector	value	expect
-TC03	Playwrightサイトテスト	goto	https://playwright.dev		
-TC03	タイトル部分一致確認	assertcontains	h1		Playwright
-TC03	ページ表示確認	assertVisible	nav		
-TC03	スクリーンショット撮影	screenshot			
+TC11_PlayWrightテスト	Playwrightサイトテスト	goto	https://playwright.dev		
+TC11_PlayWrightテスト	タイトル部分一致確認	assertcontains	h1		Playwright
+TC11_PlayWrightテスト	ページ表示確認	assertVisible	nav		
+TC11_PlayWrightテスト	スクリーンショット撮影	screenshot			
