@@ -1,4 +1,4 @@
-name: Playwright Excel Tests
+name: Playwright Excelテスト
 
 on:
   push:
@@ -24,25 +24,25 @@ jobs:
     timeout-minutes: 30
     
     steps:
-    - name: Checkout code
+    - name: ソースコードをチェックアウト
       uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ env.NODE_VERSION }}
+    - name: Node.js ${{ env.NODE_VERSION }}をセットアップ
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install dependencies
+    - name: 依存関係をインストール
       run: npm install
 
-    - name: Install Playwright browsers
+    - name: Playwrightブラウザをインストール
       run: npx playwright install --with-deps
 
-    - name: Run tests
+    - name: テストを実行
       run: npm test
       continue-on-error: true
 
-    - name: Upload artifacts
+    - name: テスト結果をアップロード
       if: always()
       uses: actions/upload-artifact@v4
       with:
@@ -50,7 +50,7 @@ jobs:
         path: reports/
         retention-days: 7
 
-    - name: Publish test results
+    - name: テスト結果を公開
       if: always()
       uses: dorny/test-reporter@v1
       with:

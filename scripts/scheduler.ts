@@ -37,6 +37,7 @@ class TestScheduler {
 
   /**
    * 現在の日本時間を取得
+   * @returns {string} 日本時間の文字列（YYYY/MM/DD HH:mm:ss形式）
    */
   private getJSTTime(): string {
     return new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
@@ -44,6 +45,8 @@ class TestScheduler {
 
   /**
    * ログエントリをサニタイズ
+   * @param {LogEntry} entry - サニタイズ対象のログエントリ
+   * @returns {LogEntry} サニタイズされたログエントリ
    */
   private sanitizeLogEntry(entry: LogEntry): LogEntry {
     return {
@@ -56,6 +59,7 @@ class TestScheduler {
 
   /**
    * ログファイルを読み込み
+   * @returns {Promise<LogEntry[]>} ログエントリの配列（読み込み失敗時は空配列）
    */
   private async readLogs(): Promise<LogEntry[]> {
     try {
@@ -68,6 +72,8 @@ class TestScheduler {
 
   /**
    * ログファイルに書き込み
+   * @param {LogEntry[]} logs - 書き込むログエントリの配列
+   * @returns {Promise<void>} 書き込み完了のPromise
    */
   private async writeLogs(logs: LogEntry[]): Promise<void> {
     try {
@@ -89,6 +95,7 @@ class TestScheduler {
 
   /**
    * テストを実行し、結果をログファイルに記録する
+   * @returns {Promise<void>} テスト実行完了のPromise
    */
   async runTests(): Promise<void> {
     const startTime = this.getJSTTime();
@@ -130,6 +137,7 @@ class TestScheduler {
 
   /**
    * HTTPサーバーを起動
+   * @returns {void} 返り値なし
    */
   private startServer(): void {
     const server = http.createServer(async (req, res) => {
@@ -184,6 +192,7 @@ class TestScheduler {
 
   /**
    * スケジューラーを開始
+   * @returns {void} 返り値なし
    */
   start(): void {
     console.log('Playwright Excel Test Scheduler started');

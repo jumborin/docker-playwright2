@@ -1,4 +1,4 @@
-name: Docker Build and Test
+name: Dockerビルドとテスト
 
 on:
   push:
@@ -17,16 +17,16 @@ jobs:
     timeout-minutes: 30
     
     steps:
-    - name: Checkout code
+    - name: ソースコードをチェックアウト
       uses: actions/checkout@v4
 
-    - name: Build Docker image
+    - name: Dockerイメージをビルド
       run: docker build -t ${{ env.IMAGE_NAME }} .
 
-    - name: Create test directories
+    - name: テストディレクトリを作成
       run: mkdir -p testcases reports
 
-    - name: Run tests in Docker
+    - name: Dockerでテストを実行
       run: |
         docker run --rm \
           --name test-runner \
@@ -35,7 +35,7 @@ jobs:
           -e TZ=Asia/Tokyo \
           ${{ env.IMAGE_NAME }}
 
-    - name: Upload test artifacts
+    - name: テスト結果をアップロード
       if: always()
       uses: actions/upload-artifact@v4
       with:

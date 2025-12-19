@@ -54,10 +54,12 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
   }
   
   switch (step.action.toLowerCase()) {
+    // 指定されたURLにページ移動
     case 'goto':
       await page.goto(step.selector, { timeout: 60000, waitUntil: 'domcontentloaded' });
       break;
       
+    // 入力フィールドに値を入力
     case 'fill':
       if (!step.selector) {
         throw new Error('Fill action requires a valid selector');
@@ -65,36 +67,44 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
       await page.fill(step.selector, step.value || '');
       break;
       
+    // 要素をクリック
     case 'click':
       await page.click(step.selector);
       break;
       
+    // 要素のテキストが期待値と一致するかを確認
     case 'asserttext':
       await expect(page.locator(step.selector)).toHaveText(step.expect || '');
       break;
       
+    // 要素が表示されているかを確認
     case 'assertvisible':
       await expect(page.locator(step.selector)).toBeVisible();
       break;
       
+    // 指定された時間だけ待機
     case 'wait':
       const waitTime = parseInt(step.value || '1000');
       const validWaitTime = Number.isNaN(waitTime) ? 1000 : waitTime;
       await page.waitForTimeout(validWaitTime);
       break;
       
+    // 入力フィールドに文字をタイピング
     case 'type':
       await page.type(step.selector, step.value || '');
       break;
       
+    // セレクトボックスで選択肢を選択
     case 'select':
       await page.selectOption(step.selector, step.value || '');
       break;
       
+    // 要素にマウスホバー
     case 'hover':
       await page.hover(step.selector);
       break;
       
+    // スクリーンショットを撮影
     case 'screenshot':
       const browserName = page.context().browser()?.browserType().name() || 'unknown';
       const now = new Date();
@@ -104,6 +114,7 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
       });
       break;
       
+    // 未知のアクション
     default:
       console.warn(`Unknown action: ${step.action}`);
       break;
