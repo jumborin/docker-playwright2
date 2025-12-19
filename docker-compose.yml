@@ -8,6 +8,9 @@ x-common: &common
   environment:
     - NODE_ENV=production
     - TZ=Asia/Tokyo
+    - LANG=en_US.UTF-8
+    - LC_ALL=en_US.UTF-8
+    - NODE_OPTIONS=--max-old-space-size=4096
 
 services:
   playwright-test:

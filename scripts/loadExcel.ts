@@ -24,11 +24,11 @@ export function loadTestSteps(filePath: string): TestStep[] {
   }
 
   try {
-    const workbook = xlsx.readFile(filePath);
+    const workbook = xlsx.readFile(filePath, { codepage: 65001 });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     
-    const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+    const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1, raw: false });
     const headers = jsonData[0] as string[];
     const rows = jsonData.slice(1) as any[][];
 

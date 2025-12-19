@@ -1,6 +1,10 @@
 import { test, expect, Page } from '@playwright/test';
 import { loadAllTestCases, TestStep } from '../scripts/loadExcel';
 
+// UTF-8出力を強制
+process.stdout.setEncoding('utf8');
+process.stderr.setEncoding('utf8');
+
 let allSteps: TestStep[] = [];
 let testCases: string[] = [];
 
@@ -17,9 +21,12 @@ test('Load and execute test cases', async ({ page }) => {
   }
 
   for (const caseId of testCases) {
-    console.log(`Executing test case: ${caseId}`);
     const caseSteps = allSteps.filter(step => step.caseId === caseId);
-
+    const firstStep = caseSteps[0];
+    const description = firstStep?.description || '';
+    const displayName = description ? `${caseId}: ${description}` : caseId;
+    
+    console.log(`Executing test case: ${displayName}`);
     console.log(`Executing test case: ${caseId} with ${caseSteps.length} steps`);
     
     for (const [index, step] of caseSteps.entries()) {
@@ -48,7 +55,7 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
   
   switch (step.action.toLowerCase()) {
     case 'goto':
-      await page.goto(step.selector);
+      await page.goto(step.selector, { timeout: 60000, waitUntil: 'domcontentloaded' });
       break;
       
     case 'fill':

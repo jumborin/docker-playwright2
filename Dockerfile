@@ -1,7 +1,18 @@
 FROM mcr.microsoft.com/playwright:v1.57.0-noble
 
-# Set timezone to Japan
+# Install and configure UTF-8 locale
+RUN apt-get update && apt-get install -y locales && \
+    sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables for UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANGUAGE=en_US:en
 ENV TZ=Asia/Tokyo
+ENV LESSCHARSET=utf-8
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
