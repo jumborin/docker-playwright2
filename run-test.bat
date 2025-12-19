@@ -2,6 +2,10 @@
 echo Starting Playwright Excel Test...
 echo.
 
+echo Cleaning up previous test results...
+if exist reports rmdir /s /q reports
+if exist test-results rmdir /s /q test-results
+
 echo Cleaning up Docker resources...
 docker-compose down --remove-orphans --volumes
 docker network prune -f

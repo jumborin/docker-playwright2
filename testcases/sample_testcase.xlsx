@@ -1,8 +1,13 @@
 caseId	description	action	selector	value	expect
-TC01	Playwrightサイトテスト	goto	https://playwright.dev		
-TC01	タイトル部分一致確認	assertcontains	h1		Playwright
-TC01	ページ表示確認	assertVisible	nav		
-TC01	スクリーンショット撮影	screenshot			
-TC02	Redmineサイトテスト	goto	https://www.redmine.org/		
-TC02	ページ表示確認	assertVisible	body		
-TC02	スクリーンショット撮影	screenshot			
+TC01_PlayWright	Playwrightサイトテスト	goto	https://playwright.dev		
+TC01_PlayWright	タイトル部分一致確認	assertcontains	h1		Playwright
+TC01_PlayWright	ページ表示確認	assertVisible	nav		
+TC01_PlayWright	スクリーンショット撮影	screenshot			
+TC02_遷移	Redmineサイトテスト	goto	https://www.redmine.org/		
+TC02_遷移	「概要」をクリック	click	#main-menu > ul > li:nth-child(1) > a		
+TC02_遷移	ページ表示確認	assertVisible	body		
+TC02_遷移	スクリーンショット撮影	screenshot			
+TC03_検索	検索ボックスに入力	fill	#q	テスト	
+TC03_検索	Enterキーを入力	press		Enter	
+TC02_遷移	ページ表示確認(検索ボタンがあること)	asserttext 	結果 (0)		
+TC03_検索	スクリーンショット撮影	screenshot			

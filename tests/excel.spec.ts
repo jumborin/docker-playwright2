@@ -14,11 +14,15 @@ test.beforeAll(async () => {
 });
 
 test('Load and execute test cases', async ({ page }) => {
+  test.setTimeout(120000); // 2分のタイムアウト
+  
   if (testCases.length === 0) {
     console.log('No Excel test cases found in ./testcases directory');
     expect(true).toBe(true);
     return;
   }
+
+  console.log(`Found ${testCases.length} test cases: ${testCases.join(', ')}`);
 
   for (const caseId of testCases) {
     const caseSteps = allSteps.filter(step => step.caseId === caseId);
@@ -26,19 +30,23 @@ test('Load and execute test cases', async ({ page }) => {
     const description = firstStep?.description || '';
     const displayName = description ? `${caseId}: ${description}` : caseId;
     
-    console.log(`Executing test case: ${displayName}`);
-    console.log(`Executing test case: ${caseId} with ${caseSteps.length} steps`);
+    console.log(`\n=== Executing test case: ${displayName} ===`);
+    console.log(`Steps count: ${caseSteps.length}`);
     
     for (const [index, step] of caseSteps.entries()) {
-      console.log(`Step ${index + 1}: ${step.action} - ${step.selector}`);
+      console.log(`Step ${index + 1}/${caseSteps.length}: ${step.action} - ${step.selector} - ${step.value || ''} - ${step.expect || ''}`);
       
       try {
+        const startTime = Date.now();
         await executeStep(page, step);
+        const duration = Date.now() - startTime;
+        console.log(`  ✓ Completed in ${duration}ms`);
       } catch (error) {
-        console.error(`Error in step ${index + 1} of case ${caseId}:`, error);
+        console.error(`  ✗ Error in step ${index + 1} of case ${caseId}:`, error);
         throw error;
       }
     }
+    console.log(`=== Completed test case: ${caseId} ===\n`);
   }
 });
 
@@ -48,9 +56,14 @@ test('Load and execute test cases', async ({ page }) => {
  * @param step 実行するテストステップ
  */
 async function executeStep(page: Page, step: TestStep): Promise<void> {
-  const actionsWithoutSelector = ['screenshot', 'wait'];
+  const actionsWithoutSelector = ['screenshot', 'wait', 'press'];
   if (!actionsWithoutSelector.includes(step.action.toLowerCase()) && (!step.selector || step.selector.trim() === '')) {
     throw new Error(`Invalid selector for action '${step.action}': selector is required`);
+  }
+  
+  // pressアクションの場合、valueが必要
+  if (step.action.toLowerCase() === 'press' && (!step.value || step.value.trim() === '')) {
+    throw new Error(`Press action requires a key name in the 'value' field`);
   }
   
   switch (step.action.toLowerCase()) {
@@ -64,12 +77,12 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
       if (!step.selector) {
         throw new Error('Fill action requires a valid selector');
       }
-      await page.fill(step.selector, step.value || '');
+      await page.fill(step.selector, step.value || '', { timeout: 30000 });
       break;
       
     // 要素をクリック
     case 'click':
-      await page.click(step.selector);
+      await page.click(step.selector, { timeout: 30000 });
       break;
       
     // 要素のテキストが期待値と一致するかを確認
@@ -91,7 +104,31 @@ async function executeStep(page: Page, step: TestStep): Promise<void> {
       
     // 入力フィールドに文字をタイピング
     case 'type':
-      await page.type(step.selector, step.value || '');
+      await page.type(step.selector, step.value || '', { timeout: 30000 });
+      break;
+      
+    // キーボードキーを押下
+    case 'press':
+      const keyName = step.value || step.selector;
+      console.log(`Pressing key: '${keyName}'`);
+      
+      // キー名を正規化
+      const normalizedKey = keyName.trim();
+      
+      try {
+        // フォーカスされた要素がある場合はその要素にキーを送信
+        const focusedElement = await page.locator(':focus').count();
+        if (focusedElement > 0 && normalizedKey.toLowerCase() === 'enter') {
+          await page.locator(':focus').press('Enter');
+          console.log(`Pressed Enter on focused element`);
+        } else {
+          await page.keyboard.press(normalizedKey);
+          console.log(`Successfully pressed key: '${normalizedKey}'`);
+        }
+      } catch (error) {
+        console.error(`Failed to press key '${normalizedKey}':`, error);
+        throw error;
+      }
       break;
       
     // セレクトボックスで選択肢を選択

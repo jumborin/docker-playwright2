@@ -51,6 +51,7 @@ run-test.bat
 - `assertvisible`: 要素表示確認
 - `wait`: 待機
 - `type`: タイピング
+- `press`: キーボードキー押下（valueフィールドにEnter, Tab, Escapeなどを指定）
 - `select`: セレクトボックス
 - `hover`: ホバー
 - `screenshot`: スクリーンショット
